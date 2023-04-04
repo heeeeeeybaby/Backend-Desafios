@@ -1,9 +1,3 @@
-/* 
-
-El objeto debe agregarse satisfactoriamente con un id generado automáticamente SIN REPETIRSE
-
-*/
-
 /********   DESAFÍO 1   **********/
 
 // Clase auxiliar para crear los productos
@@ -19,7 +13,7 @@ class Product {
         this.id = Product.incrementID()
     }
     static incrementID() {
-        if (this.idIncrement) { //Existe esta propiedad
+        if (this.idIncrement) { 
             this.idIncrement++
         } else {
             this.idIncrement = 1
@@ -47,8 +41,6 @@ class ProductManager {
             return this.products;
     }
     
-    
-
     // Método addProducts genera un id único por cada producto que ingresa, debe arrojar un error porque el código estará repetido.
     addProduct(product) {
         if (this.products.find(producto => producto.code == product.code)) {
@@ -56,6 +48,14 @@ class ProductManager {
         } else {
             this.products.push(product)
         }
+    }
+
+    getProductByCode(code) {
+        const product = this.products.find(producto => producto.code == code)
+        if (product) { 
+            return true
+        }
+        return false
     }
 
 
@@ -80,7 +80,7 @@ console.log(productManager.getProducts());
 productManager.addProduct(product1); 
 productManager.addProduct(product2); 
 productManager.addProduct(product3); 
-productManager.addProduct(product4); 
+productManager.addProduct(product4, product5); 
 
 console.log("Comprueba que arroja error al agregar productos con el mismo código: ")
 productManager.addProduct(product4); 
@@ -89,10 +89,6 @@ productManager.addProduct(product4);
 
 console.log("Comprueba que agrega productos al array: ")
 console.log(productManager.getProducts());
-
-// Debe validar que ningún campo esté vacío
-console.log("Comprueba que al agregar un producto sin campos, quedan los valores por defecto: ")
-console.log(productManager.addProduct(product7)); 
 
 //Se evaluará que getProductById devuelva error si no encuentra el producto o el producto en caso de encontrarlo
 console.log("Comprueba que al buscar por ID trae el producto: ")
