@@ -80,7 +80,8 @@ console.log(productManager.getProducts());
 productManager.addProduct(product1); 
 productManager.addProduct(product2); 
 productManager.addProduct(product3); 
-productManager.addProduct(product4, product5); 
+productManager.addProduct(product4); 
+productManager.addProduct(product5); 
 
 console.log("Comprueba que arroja error al agregar productos con el mismo código: ")
 productManager.addProduct(product4); 
