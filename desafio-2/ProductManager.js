@@ -17,14 +17,6 @@ class ProductManager {
         await fs.writeFile(this.path, JSON.stringify(prods))
         return "Producto creado"
     }
-
-    /*     async addProduct(product) {
-        if (this.products.find(producto => producto.code == product.code)) {
-            return "Este producto ya existe"
-        } else {
-            this.products.push(product)
-        }
-    } */
     //Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo.
     async getProducts() {
         const products = await fs.readFile(this.path, 'utf-8')
@@ -33,15 +25,15 @@ class ProductManager {
     }
 
     //Debe tener un método getProductById, el cual debe recibir un id, y tras leer el archivo, debe buscar el producto con el id especificado y devolverlo en formato objeto
+
     async getProductById(id) {
-        const products = await fs.readFile(this.path, 'utf-8')
-        const product = this.products.find(producto => producto.id == id)
-
-        if (product) { 
-            return product
+        const prodsJSON = await fs.readFile(this.path, 'utf-8')
+        const prods = JSON.parse(prodsJSON)
+        if (prods.some(prod => prod.id === parseInt(id))) {
+            return prods.find(prod => prod.id === parseInt(id))
+        } else {
+            return "Producto no encontrado"
         }
-
-        return "Producto no encontrado"
     }
 
     //Debe tener un método updateProduct, el cual debe recibir el id del producto a actualizar, así también como el campo a actualizar (puede ser el objeto completo, como en una DB), y debe actualizar el producto que tenga ese id en el archivo. NO DEBE BORRARSE SU ID 
