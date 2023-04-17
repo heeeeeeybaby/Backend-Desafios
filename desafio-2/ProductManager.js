@@ -10,12 +10,21 @@ class ProductManager {
 
     //Debe tener un método addProduct el cual debe recibir un objeto con el formato previamente especificado, asignarle un id autoincrementable y guardarlo en el arreglo (recuerda siempre guardarlo como un array en el archivo).
     async addProduct(product) {
+        const prodsJSON = await fs.readFile(this.path, 'utf-8')
+        const prods = JSON.parse(prodsJSON)
+        producto.id = ProductManager.incrementarID()
+        prods.push(product)
+        await fs.writeFile(this.path, JSON.stringify(prods))
+        return "Producto creado"
+    }
+
+    /*     async addProduct(product) {
         if (this.products.find(producto => producto.code == product.code)) {
             return "Este producto ya existe"
         } else {
             this.products.push(product)
         }
-    }
+    } */
     //Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo.
     async getProducts() {
         const products = await fs.readFile(this.path, 'utf-8')
@@ -25,6 +34,7 @@ class ProductManager {
 
     //Debe tener un método getProductById, el cual debe recibir un id, y tras leer el archivo, debe buscar el producto con el id especificado y devolverlo en formato objeto
     async getProductById(id) {
+        const products = await fs.readFile(this.path, 'utf-8')
         const product = this.products.find(producto => producto.id == id)
 
         if (product) { 
