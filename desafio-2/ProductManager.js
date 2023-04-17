@@ -36,35 +36,37 @@ class ProductManager {
 
     //Debe tener un método updateProduct, el cual debe recibir el id del producto a actualizar, así también como el campo a actualizar (puede ser el objeto completo, como en una DB), y debe actualizar el producto que tenga ese id en el archivo. NO DEBE BORRARSE SU ID 
 
-    async updateProduct() {
-        const products = await fs.readFile(this.path, 'utf-8')
-        const prods = JSON.parse(products)
-
-/*         try {
-            await fs.writeFile(this.path, JSON.stringify(productos))
-            const contenido = await fs.readFile(ruta, 'utf-8') //Consulto el array
-    
-            //TODAS LAS MODIFICACIONES, AGREGACIONES Y ELIMINACIONES
-            const aux = JSON.parse(contenido)
-            aux.push(prod1)
-            //Siempre voy a tener que reemplazar
-            await fs.writeFile(ruta, JSON.stringify(aux))
-            aux.push(prod1)
-            await fs.writeFile(ruta, JSON.stringify(aux))
-            //await fs.unlink(ruta)
-    
-        } catch (error) {
-            return error
-        } */
+    async updateProduct(id, { title, description, price, thumbnail, code, stock }) {
+        const prodsJSON = await fs.readFile(this.path, 'utf-8')
+        const prods = JSON.parse(prodsJSON)
+        if (prods.some(prod => prod.id === parseInt(id))) {
+            let index = prods.findIndex(prod => prod.id === parseInt(id))
+            prods[index].title = title
+            prods[index].description = description
+            prods[index].price = price
+            prods[index].thumbnail = thumbnail
+            prods[index].code = code
+            prods[index].stock = stock
+            await fs.writeFile(this.path, JSON.stringify(prods))
+            return "Producto actualizado"
+        } else {
+            return "Producto no encontrado"
+        }
     }
     
 
     //Debe tener un método deleteProduct, el cual debe recibir un id y debe eliminar el producto que tenga ese id en el archivo.
-    async deleteProduct() {
-
+    async deleteProduct(id) {
+        const prodsJSON = await fs.readFile(this.path, 'utf-8')
+        const prods = JSON.parse(prodsJSON)
+        if (prods.some(prod => prod.id === parseInt(id))) {
+            const prodsFiltrados = prods.filter(prod => prod.id !== parseInt(id))
+            await fs.writeFile(this.path, JSON.stringify(prodsFiltrados))
+            return "Producto eliminado"
+        } else {
+            return "Producto no encontrado"
+        }
     }
-
-
 }
 
 //Debe guardar objetos con el siguiente formato
@@ -98,5 +100,5 @@ const product6 = new Product ("Delantal 'Quizás la casa, la rutina, se ha conve
 const product7 = new Product();
 
 
-const productManager = new ProductManager('./info.txt')
-await productManager.getProducts()
+const productManager = new ProductManager('info.txt')
+productManager.getProducts().then(prod => console.log(prod))
