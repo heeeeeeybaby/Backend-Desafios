@@ -17,10 +17,14 @@ export class ProductManager {
     async addProduct(producto) {
         const prodsJSON = await fs.readFile(this.path, 'utf-8')
         const prods = JSON.parse(prodsJSON)
-        producto.id = ProductManager.incrementarID()
-        prods.push(producto)
-        await fs.writeFile(this.path, JSON.stringify(prods))
-        return "Producto creado"
+        if (prods.some(prod => prod.code === producto.code)) {
+            return "Producto ya existe"
+        } else {
+            producto.id = ProductManager.incrementarID()
+            prods.push(producto)
+            await fs.writeFile(this.path, JSON.stringify(prods))
+            return "Producto creado"
+        }
     }
 
     async getProducts() {

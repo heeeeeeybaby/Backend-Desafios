@@ -9,7 +9,7 @@ const PORT = 4444;
 app.use(express.json())
 app.use(express.urlencoded({ extended:true}))
 
-const productManager = new ProductManager('./productos.txt')
+const productManager = new ProductManager('./productos.json')
 
 app.get('/', (req, res) => {
     res.send("Mi primer servidor con express")
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 app.get("/product", async (req, res) => {
     try {
         const products = await productManager.getProducts();
-        const limit = parseInt(req.query.limit); 
+        const limit = req.query.limit; 
         if (limit !== undefined) {
             //se utiliza el método slice() para devolver solo los primeros X productos especificados por el parámetro limit.
             const slicedProducts = products.slice(0, limit);
